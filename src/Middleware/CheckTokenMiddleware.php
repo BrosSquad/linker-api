@@ -23,7 +23,7 @@ class CheckTokenMiddleware
         try {
             $this->checkTokenService->check($authorization);
         } catch (Throwable $e) {
-            $request->withAttribute('error', $e->getMessage);
+            $request->withAttribute('error', $e->getMessage());
         }
 
         return $handler->handle($request);

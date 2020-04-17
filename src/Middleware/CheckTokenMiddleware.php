@@ -2,46 +2,28 @@
 
 namespace BrosSquad\Linker\Api\Middleware;
 
-use BrosSquad\Linker\Api\Interfaces\ErrorMessages;
-use BrosSquad\Linker\Api\Services\KeyService;
+use BrosSquad\Linker\Api\Services\CheckTokenService;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Throwable;
 
 class CheckTokenMiddleware
 {
-    protected KeyService $keyService;
+    protected CheckTokenService $checkTokenService;
 
-    public function __construct(KeyService $keyService)
+    public function __construct(CheckTokenService $checkTokenService)
     {
-        $this->keyService = $keyService;
+        $this->checkTokenService = $checkTokenService;
     }
 
     public function __invoke(Request $request, RequestHandler $handler)
     {
         $authorization = $request->getHeader('Authorization');
 
-        if (0 === count($authorization)) {
-            $request = $request->withAttribute('error', ErrorMessages::UNAUTHORIZED);
-            // TODO: LOG HERE
-            return $handler->handle($request);
-        }
-
-        $split = explode(' ', $authorization);
-
-        if (2 !== count($split) || 'bearer' !== strtolower($split[0])) {
-            $request = $request->withAttribute('error', ErrorMessages::INVALID_AUTHORIZATION_TYPE);
-            // TODO: LOG HERE
-            return $handler->handle($request);
-        }
-
-        if (!preg_match('#^BrosSquad\.\d+\.[a-zA-Z0-9\_\-]{80,90}\.[a-zA-Z0-9\_\-]+#', $split[1])) {
-            return $handler->handle($request);
-        }
-
-        if (!$this->keyService->verify($split[1])) {
-            $request = $request->withAttribute('error', ErrorMessages::INVALID_AUTHORIZATION_TYPE);
-            // TODO: LOG HERE
-            return $handler->handle($request);
+        try {
+            $this->checkTokenService->check($authorization);
+        } catch (Throwable $e) {
+            $request->withAttribute('error', $e->getMessage);
         }
 
         return $handler->handle($request);

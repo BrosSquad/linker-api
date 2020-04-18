@@ -2,10 +2,12 @@
 
 namespace BrosSquad\Linker\Api\Tests\Services;
 
+use Exception;
 use BrosSquad\Linker\Api\Models\Key;
 use BrosSquad\Linker\Api\Services\KeyService;
 use Dotenv\Dotenv;
 use PHPUnit\Framework\TestCase;
+
 
 $dotenv = Dotenv::createImmutable(__DIR__.'/../../');
 $dotenv->load();
@@ -23,7 +25,6 @@ class KeyServiceTest extends TestCase
 
     protected function setUp(): void
     {
-        // @var Illuminate\Database\Capsule\Manager
         $this->capsule = require __DIR__.'/../../src/db/db.php';
     }
 
@@ -50,5 +51,45 @@ class KeyServiceTest extends TestCase
         ['apiKey' => $apiKey, 'key' => $key] = $keyService->create('Test');
 
         $this->assertTrue($keyService->verify($apiKey));
+
+        $key->delete();
+    }
+
+    public function testDeleteKeyWithId()
+    {
+        $keyService = new KeyService();
+        ['key' => $key] = $keyService->create('Test 1');
+
+        $this->assertTrue($keyService->delete($key->id));
+    }
+
+    public function testDeleteKeyWithIdNotFound()
+    {
+        $this->expectException(Exception::class);
+        $keyService = new KeyService();
+        $keyService->create('Test 1');
+
+        $keyService->delete(5000);
+    }
+
+    public function testDeleteKeyWithNameNotFound()
+    {
+        $this->expectException(Exception::class);
+        $keyService = new KeyService();
+        $keyService->create('Test 1');
+
+        $keyService->delete('Key that doesnt exist');
+    }
+
+
+    public function testDeleteKeyWithName()
+    {
+        $name = 'Test 1';
+        $keyService = new KeyService();
+        ['key' => $key] = $keyService->create($name);
+
+        ;
+
+        $this->assertTrue($keyService->delete($name));
     }
 }

@@ -15,6 +15,7 @@ return [
         'prefix' => '',
     ],
     'sqlite' => [
+
         'driver' => env('DB_DRIVER', 'sqlite'),
         'database' => env('DB_NAME', ':memory:'),
     ],

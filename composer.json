@@ -33,7 +33,9 @@
         "rakit/validation": "^1.2",
         "vlucas/phpdotenv": "^4.1",
         "monolog/monolog": "^2.0",
-        "mongodb/mongodb": "^1.6"
+        "mongodb/mongodb": "^1.6",
+        "symfony/console": "^5.0",
+        "dusan/dotenv": "^1.6"
     },
     "autoload": {
         "files": [

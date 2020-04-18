@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4ff568a1f344828764706a1838fb496b",
+    "content-hash": "b8968c52f540db0bc095abfec32460b1",
     "packages": [
         {
             "name": "cakephp/cache",
@@ -408,6 +408,83 @@
                 "string"
             ],
             "time": "2019-10-30T19:59:35+00:00"
+        },
+        {
+            "name": "dusan/dotenv",
+            "version": "v1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BrosSquad/dotenv.git",
+                "reference": "946b8cfc2457d8ab0692cdef07e6966cf2624a05"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BrosSquad/dotenv/zipball/946b8cfc2457d8ab0692cdef07e6966cf2624a05",
+                "reference": "946b8cfc2457d8ab0692cdef07e6966cf2624a05",
+                "shasum": ""
+            },
+            "require": {
+                "dusan/php-mvc-file": "1.0",
+                "ext-mbstring": "*"
+            },
+            "require-dev": {
+                "codedungeon/phpunit-result-printer": "^0.26.2",
+                "phpunit/phpunit": "^8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "BrosSquad\\DotEnv\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Dusan Malusev",
+                    "email": "dusan.998@outlook.com"
+                }
+            ],
+            "description": "Env Parser for PhpMvc Framework",
+            "time": "2019-11-09T22:38:46+00:00"
+        },
+        {
+            "name": "dusan/php-mvc-file",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/malusev998/PhpMvc-File.git",
+                "reference": "d99668cef6784c746824d7fc1970f62a3b7b5353"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/malusev998/PhpMvc-File/zipball/d99668cef6784c746824d7fc1970f62a3b7b5353",
+                "reference": "d99668cef6784c746824d7fc1970f62a3b7b5353",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Dusan\\PhpMvc\\File\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Dusan Malusev",
+                    "email": "dusan.998@outlook.com"
+                }
+            ],
+            "description": "Extension to SplFileObject",
+            "time": "2019-05-28T19:14:34+00:00"
         },
         {
             "name": "fig/http-message-util",

@@ -7,9 +7,14 @@ use Psr\Http\Message\ResponseInterface as Response;
 abstract class ApiController
 {
     /**
-     * @param mixed $data
+     * @param  \Psr\Http\Message\ResponseInterface  $response
+     * @param  mixed  $data
      *
      * Serialize the response to return JSON, with a custom HTTP status code
+     *
+     * @param  int  $statusCode
+     *
+     * @return \Psr\Http\Message\ResponseInterface
      */
     protected function response(Response $response, $data, int $statusCode): Response
     {

@@ -35,7 +35,8 @@
         "monolog/monolog": "^2.0",
         "mongodb/mongodb": "^1.6",
         "symfony/console": "^5.0",
-        "dusan/dotenv": "^1.6"
+        "dusan/dotenv": "^1.6",
+        "ext-json": "*"
     },
     "autoload": {
         "files": [

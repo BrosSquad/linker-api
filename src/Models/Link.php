@@ -6,10 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Link extends Model
 {
-    /**
-     * @var array
-     */
-    protected $fillable = [
-        'url',
-    ];
+    protected $fillable = ['url'];
 }

@@ -28,9 +28,9 @@ class CheckTokenService
             throw new AuthenticationTypeException();
         }
 
-        // if (!preg_match('#^BrosSquad\.\d+\.[a-zA-Z0-9\_\-]{80,90}\.[a-zA-Z0-9\_\-]+#', $split[1])) {
-        //     throw new InvalidTokenException();
-        // }
+        if (!preg_match('#^BrosSquadLinker\.[A-Za-z0-9-_]+\.?[A-Za-z0-9-_.+]*$#', $split[1])) {
+            throw new InvalidTokenException();
+        }
 
         if (!$this->keyService->verify($split[1])) {
             throw new InvalidTokenException();

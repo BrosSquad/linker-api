@@ -2,13 +2,18 @@
 
 namespace BrosSquad\Linker\Api\Middleware;
 
+use BrosSquad\Linker\Api\Interfaces\HttpStatusCodes;
 use BrosSquad\Linker\Api\Services\CheckTokenService;
+use BrosSquad\Linker\Api\Traits\ResponseTrait;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Slim\Psr7\Response;
 use Throwable;
 
 class CheckTokenMiddleware
 {
+    use ResponseTrait;
+
     protected CheckTokenService $checkTokenService;
 
     public function __construct(CheckTokenService $checkTokenService)
@@ -21,9 +26,9 @@ class CheckTokenMiddleware
         $authorization = $request->getHeader('Authorization');
 
         try {
-            $this->checkTokenService->check($authorization);
+            $apiKey = $this->checkTokenService->check($authorization);
         } catch (Throwable $e) {
-            $request->withAttribute('error', $e->getMessage());
+            return $this->response(new Response(), ['error' => $e->getMessage()], HttpStatusCodes::UNAUTHORIZED);
         }
 
         return $handler->handle($request);

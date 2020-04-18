@@ -3,31 +3,32 @@
 namespace BrosSquad\Linker\Api\Services;
 
 use BrosSquad\Linker\Api\Models\Key;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use RuntimeException;
 
 class KeyService
 {
-    public function get()
+    /**
+     * @return LengthAwarePaginator<Key>
+     */
+    public function get(int $page = 1, int $perPage = 15): LengthAwarePaginator
     {
-        return Key::all();
+        return Key::query()
+            ->latest()
+            ->paginate($perPage, ['*'], 'page', $page)
+        ;
     }
 
     /**
      * @throws \Throwable
-     *
-     * @param  string  $name
-     *
-     * @return array
      */
     public function create(string $name): array
     {
         $apiKey = 'BrosSquadLinker.%s.%s';
 
-        $key = new Key(
-            [
-                'name' => $name,
-            ]
-        );
+        $key = new Key([
+            'name' => $name,
+        ]);
 
         $appKey = sodium_base642bin($_ENV['APP_KEY'], SODIUM_BASE64_VARIANT_ORIGINAL_NO_PADDING);
 
@@ -47,7 +48,7 @@ class KeyService
 
         return [
             'apiKey' => $apiKey,
-            'key'    => $key,
+            'key' => $key,
         ];
     }
 
@@ -77,22 +78,20 @@ class KeyService
                );
     }
 
-
     /**
+     * @param string | int $idOrName
+     *
      * @throws \Exception
-     *
-     * @param $idOrName
-     *
-     * @return bool
      */
     public function delete($idOrName): bool
     {
-        if (($id = intval($idOrName)) !== 0) {
+        if (0 !== ($id = intval($idOrName))) {
             $key = Key::query()->findOrFail($id);
         } else {
             $key = Key::query()
                 ->where('name', '=', $idOrName)
-                ->firstOrFail();
+                ->firstOrFail()
+            ;
         }
 
         return $key->delete();

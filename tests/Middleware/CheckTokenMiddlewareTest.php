@@ -3,11 +3,11 @@
 namespace BrosSquad\Linker\Api\Tests\Middleware;
 
 use BrosSquad\Linker\Api\Exceptions\AuthenticationTypeException;
+use BrosSquad\Linker\Api\Exceptions\InvalidTokenException;
 use BrosSquad\Linker\Api\Exceptions\NoTokenSuppliedException;
 use BrosSquad\Linker\Api\Services\CheckTokenService;
 use BrosSquad\Linker\Api\Services\KeyService;
-use PHPUnit\Framework\TestCase;
-use SodiumException;
+use BrosSquad\Linker\Api\Tests\TestCase;
 
 /**
  * @internal
@@ -15,22 +15,6 @@ use SodiumException;
  */
 class CheckTokenMiddlewareTest extends TestCase
 {
-    /**
-     * @var Illuminate\Database\Capsule\Manager
-     */
-    private $capsule;
-
-    protected function setUp(): void
-    {
-        // @var Illuminate\Database\Capsule\Manager
-        $this->capsule = require __DIR__.'/../../src/db/db.php';
-    }
-
-    public function tearDown(): void
-    {
-        $this->capsule->table('keys')->truncate();
-    }
-
     public function testHandlePasses()
     {
         $keyService = new KeyService();
@@ -67,7 +51,7 @@ class CheckTokenMiddlewareTest extends TestCase
 
     public function testHandleFailsSodiumException()
     {
-        $this->expectException(SodiumException::class);
+        $this->expectException(InvalidTokenException::class);
         $keyService = new KeyService();
         $checkTokenService = new CheckTokenService($keyService);
 

@@ -16,12 +16,17 @@ $app = Bridge::create($container);
 $app->addRoutingMiddleware();
 $app->addBodyParsingMiddleware();
 
-$globalErrorHandler = new GlobalErrorHandler($app->getCallableResolver(), $app->getResponseFactory(), $container->get(Logger::class));
+$globalErrorHandler = new GlobalErrorHandler(
+    $app->getCallableResolver(),
+    $app->getResponseFactory(),
+    $container->get(Logger::class)
+);
 $globalErrorHandler->forceContentType('application/json');
 
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 $errorMiddleware->setDefaultErrorHandler($globalErrorHandler);
 
 // ROUTES HERE
+require_once __DIR__.'/../src/routes/api.php';
 
 $app->run();

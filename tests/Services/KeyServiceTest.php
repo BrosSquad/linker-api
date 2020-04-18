@@ -2,15 +2,10 @@
 
 namespace BrosSquad\Linker\Api\Tests\Services;
 
-use Exception;
 use BrosSquad\Linker\Api\Models\Key;
 use BrosSquad\Linker\Api\Services\KeyService;
-use Dotenv\Dotenv;
-use PHPUnit\Framework\TestCase;
-
-
-$dotenv = Dotenv::createImmutable(__DIR__.'/../../');
-$dotenv->load();
+use BrosSquad\Linker\Api\Tests\TestCase;
+use Exception;
 
 /**
  * @internal
@@ -18,21 +13,6 @@ $dotenv->load();
  */
 class KeyServiceTest extends TestCase
 {
-    /**
-     * @var Illuminate\Database\Capsule\Manager
-     */
-    private $capsule;
-
-    protected function setUp(): void
-    {
-        $this->capsule = require __DIR__.'/../../src/db/db.php';
-    }
-
-    public function tearDown(): void
-    {
-        $this->capsule->table('keys')->truncate();
-    }
-
     public function testGenKey()
     {
         $keyService = new KeyService();
@@ -81,14 +61,11 @@ class KeyServiceTest extends TestCase
         $keyService->delete('Key that doesnt exist');
     }
 
-
     public function testDeleteKeyWithName()
     {
         $name = 'Test 1';
         $keyService = new KeyService();
         ['key' => $key] = $keyService->create($name);
-
-        ;
 
         $this->assertTrue($keyService->delete($name));
     }

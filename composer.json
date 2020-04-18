@@ -36,7 +36,8 @@
         "mongodb/mongodb": "^1.6",
         "symfony/console": "^5.0",
         "dusan/dotenv": "^1.6",
-        "ext-json": "*"
+        "ext-json": "*",
+        "illuminate/pagination": "^7.6"
     },
     "autoload": {
         "files": [

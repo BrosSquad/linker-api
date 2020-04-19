@@ -9,6 +9,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Rakit\Validation\Validator;
 use Throwable;
+use Monolog\Logger;
 
 /**
  * Class KeysController.
@@ -19,8 +20,11 @@ class KeysController extends ApiController
 
     protected Validator $validator;
 
-    public function __construct(KeyService $keyService, Validator $validator)
+    protected Logger $logger;
+
+    public function __construct(KeyService $keyService, Validator $validator, Logger $logger)
     {
+        $this->logger = $logger;
         $this->keyService = $keyService;
         $this->validator = $validator;
     }
@@ -86,6 +90,11 @@ class KeysController extends ApiController
                 HttpStatusCodes::OK
             );
         } catch (Throwable $e) {
+            $this->logger->error($e->getMessage(), [
+                'route' => $request->getUri()->getPath(),
+                'requestBody' => $body,
+            ]);
+
             return $this->response(
                 $response,
                 ['error' => ErrorMessages::SERVER_ERROR],
@@ -111,6 +120,11 @@ class KeysController extends ApiController
                 HttpStatusCodes::NO_CONTENT
             );
         } catch (Throwable $e) {
+            $this->logger->error($e->getMessage(), [
+                'route' => $request->getUri()->getPath(),
+                'requestParam' => $id,
+            ]);
+
             return $this->response(
                 $response,
                 ['error' => ErrorMessages::SERVER_ERROR],

@@ -30,9 +30,27 @@ class LinksController extends ApiController
 
     public function get(Request $request, Response $response): Response
     {
+        $urlQueryStrings = $request->getQueryParams();
+
+        $validation = $this->validator->validate($urlQueryStrings, [
+            'page' => 'required|numeric|min:1',
+            'perPage' => 'required|numeric|min:1',
+        ]);
+
+        if ($validation->fails()) {
+            return $this->response(
+                $response,
+                ['error' => $validation->errors()->firstOfAll()],
+                HttpStatusCodes::UNPROCESSABLE_ENTITY
+            );
+        }
+
         return $this->response(
             $response,
-            $this->linkService->get(),
+            $this->linkService->get(
+                (int) $urlQueryStrings['page'],
+                (int) $urlQueryStrings['perPage']
+            ),
             HttpStatusCodes::OK
         );
     }
